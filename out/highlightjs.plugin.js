@@ -106,7 +106,7 @@ module.exports = function(BasePlugin) {
           }
         }
       }
-      result = ("<div class=\"component-example " + language + "\">{#source}</div><pre class=\"highlighted\"><code class=\"" + language + "\">" + result + "</code></pre>").replace(/\t/g, replaceTab);
+      result = ("<div class=\"component-example " + language + "\">" + source + "</div><pre class=\"highlighted\"><code class=\"" + language + "\">" + result + "</code></pre>").replace(/\t/g, replaceTab);
       next(null, result);
       return this;
     };
