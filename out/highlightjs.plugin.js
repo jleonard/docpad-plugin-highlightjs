@@ -8,6 +8,9 @@ module.exports = function(BasePlugin) {
   balUtil = require('bal-util');
   extendr = require('extendr');
   hljs = require('highlight.js');
+
+  var fs = require('fs');
+
   cache = {};
   return HighlightjsPlugin = (function(_super) {
     var extractLanguage;
@@ -107,6 +110,12 @@ module.exports = function(BasePlugin) {
         }
       }
       result = ("<div class=\"component-example " + language + "\">" + source + "</div><pre class=\"highlighted\"><code class=\"" + language + "\">" + result + "</code></pre>").replace(/\t/g, replaceTab);
+      
+      fs.writeFile('foo.txt', language, function (err) {
+        if (err) throw err;
+        console.log('It\'s saved!');
+      });
+
       next(null, result);
       return this;
     };
