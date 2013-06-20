@@ -111,10 +111,14 @@ module.exports = function(BasePlugin) {
       }
       result = ("<div class=\"component-example " + language + "\">" + source + "</div><pre class=\"highlighted\"><code class=\"" + language + "\">" + result + "</code></pre>").replace(/\t/g, replaceTab);
       
-      fs.writeFile('foo.txt', language, function (err) {
-        if (err) throw err;
-        console.log('It\'s saved!');
-      });
+      if(opts.shortcut.length > 0){
+        var data = makeSnippet(opts.shortcut,source);
+        var exists = fs.existsSync("snippets");
+        if(!exists){
+          fs.mkdirSync("snippets");
+        }
+        fs.writeFileSync('snippets/'+opts.shortcut+".sublime-snippet",data);
+      }
 
       next(null, result);
       return this;
@@ -138,11 +142,12 @@ module.exports = function(BasePlugin) {
           removeIndentation: false,
           replace: function(outerHTML, elementNameMatched, attributes, innerHTML, replaceElementCompleteCallback) {
             var classes;
-
+            var shortcut;
             classes = balUtil.getAttribute(attributes, 'class') || '';
             if (classes.indexOf('highlighted') !== -1) {
               return replaceElementCompleteCallback(null, outerHTML);
             }
+            shortcut = balUtil.getAttribute(attributes,'data-shortcut') || '';
             return balUtil.replaceElementAsync({
               html: innerHTML,
               element: 'code',
@@ -151,7 +156,9 @@ module.exports = function(BasePlugin) {
                 var _ref2;
 
                 classes = balUtil.getAttribute(attributes, 'class') || '';
+                shortcut = balUtil.getAttribute(attributes,'data-shortcut') || shortcut;
                 return plugin.highlightSource({
+                  shortcut: shortcut,
                   source: innerHTML,
                   language: classes,
                   config: (_ref2 = file.attributes.plugins) != null ? _ref2.highlightjs : void 0,
@@ -178,4 +185,9 @@ module.exports = function(BasePlugin) {
     return HighlightjsPlugin;
 
   })(BasePlugin);
+
+function makeSnippet(shortcut,source){
+  return "<snippet><content><![CDATA["+source+"]]></content><tabTrigger>"+shortcut+"</tabTrigger></snippet>";
+}
+
 };
