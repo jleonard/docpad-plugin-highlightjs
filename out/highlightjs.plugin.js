@@ -22,7 +22,7 @@ module.exports = function(BasePlugin) {
       return _ref;
     }
 
-    HighlightjsPlugin.prototype.name = 'highlightjs';
+    HighlightjsPlugin.prototype.name = 'highlightjsjl';
 
     HighlightjsPlugin.prototype.config = {
       replaceTab: '    ',
