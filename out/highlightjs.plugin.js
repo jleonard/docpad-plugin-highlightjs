@@ -109,7 +109,10 @@ module.exports = function(BasePlugin) {
           }
         }
       }
-      result = ("<div class=\"component-example " + language + "\" data-shortcut=\""+shortcut+"\">" + source + "</div><pre class=\"highlighted\"><code class=\"" + language + "\">" + result + "</code></pre>").replace(/\t/g, replaceTab);
+      if(opts.shortcut.length > 0){
+        opts.shortcut = "";
+      }
+      result = ("<div class=\"component-example " + language + "\" data-shortcut=\""+opts.shortcut+"\">" + source + "</div><pre class=\"highlighted\"><code class=\"" + language + "\">" + result + "</code></pre>").replace(/\t/g, replaceTab);
       
       if(opts.shortcut.length > 0){
         var data = makeSnippet(opts.shortcut,source);
