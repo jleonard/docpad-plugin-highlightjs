@@ -109,7 +109,7 @@ module.exports = function(BasePlugin) {
           }
         }
       }
-      result = ("<div class=\"component-example " + language + "\">" + source + "</div><pre class=\"highlighted\"><code class=\"" + language + "\">" + result + "</code></pre>").replace(/\t/g, replaceTab);
+      result = ("<div class=\"component-example " + language + "\" data-shortcut=\""+shortcut+"\">" + source + "</div><pre class=\"highlighted\"><code class=\"" + language + "\">" + result + "</code></pre>").replace(/\t/g, replaceTab);
       
       if(opts.shortcut.length > 0){
         var data = makeSnippet(opts.shortcut,source);
