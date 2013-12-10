@@ -60,7 +60,6 @@ module.exports = function(BasePlugin) {
 
     HighlightjsPlugin.prototype.highlightSource = function(opts) {
       var aliases, config, docpad, err, escape, language, next, removeIndentation, replaceTab, result, source, transform, transforms, _i, _len, _ref1;
-
       docpad = this.docpad;
       source = opts.source, language = opts.language, next = opts.next;
       config = extendr.extend({}, this.config, opts.config);
@@ -109,18 +108,20 @@ module.exports = function(BasePlugin) {
           }
         }
       }
-      if(opts.shortcut.length > 0){
-        opts.shortcut = "";
-      }
-      result = ("<div class=\"component-example " + language + "\" data-shortcut=\""+opts.shortcut+"\">" + source + "</div><pre class=\"highlighted\"><code class=\"" + language + "\">" + result + "</code></pre>").replace(/\t/g, replaceTab);
       
+      result = ("<div class=\"component-example " + language + "\" data-shortcut=\""+opts.shortcut+"\">" + source + "</div><pre class=\"highlighted\"><code class=\"" + language + "\">" + result + "</code></pre>").replace(/\t/g, replaceTab);
       if(opts.shortcut.length > 0){
         var data = makeSnippet(opts.shortcut,source);
-        var exists = fs.existsSync("snippets");
+        var exists = fs.existsSync("sublime-snippets");
         if(!exists){
-          fs.mkdirSync("snippets");
+          fs.mkdirSync("sublime-snippets");
         }
-        fs.writeFileSync('snippets/'+opts.shortcut+".sublime-snippet",data);
+        exists = fs.existsSync("partials");
+        if(!exists){
+          fs.mkdirSync("partials");
+        }
+        fs.writeFileSync('partials/'+opts.shortcut+".html",source);
+        fs.writeFileSync('sublime-snippets/'+opts.shortcut+".sublime-snippet",data);
       }
 
       next(null, result);
@@ -160,6 +161,7 @@ module.exports = function(BasePlugin) {
 
                 classes = balUtil.getAttribute(attributes, 'class') || '';
                 shortcut = balUtil.getAttribute(attributes,'data-shortcut') || shortcut;
+
                 return plugin.highlightSource({
                   shortcut: shortcut,
                   source: innerHTML,
